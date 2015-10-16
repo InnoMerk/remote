@@ -82,7 +82,7 @@ void vLcdTask (void *pvParameters)
 			default:
 			{	
 				lcd_goto(2,0);
-				lcd_puts("S.K.I.F.");
+				lcd_puts("SLAVE");
 			}	
 			/**/
 		}

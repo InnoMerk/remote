@@ -18,7 +18,7 @@ int main()
 		
 		//-------------------------------------------------tasks start------------------------------------------------
 		
-		xTaskCreate(vRadioTask,(const char*)"RadioTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+//		xTaskCreate(vRadioTask,(const char*)"RadioTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
 		xTaskCreate(vLedTask,(const char*)"LedTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
 		xTaskCreate(vGetLoadCPU,(const char*)"getLoadCPU",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
 		
