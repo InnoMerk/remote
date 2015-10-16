@@ -9,8 +9,8 @@ void vLcdTask (void *pvParameters)
 	uint8_t lcdMode=0;
 	uint8_t lcdCPU=0;
 	
-	
-	
+	// add a comment
+	// add once more comment
 	
 	for(;;)
 	{
