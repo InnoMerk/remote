@@ -32,15 +32,15 @@ void EXTI2_IRQHandler(void) // nRF24_IRQ_PIN
 	xSemaphoreGiveFromISR(xNRF_IRQ_Semaphore, NULL);
 }
 
-void SPI1_IRQHandler(void)
+void SPI2_IRQHandler(void)
 {
 char cIn;
 char cOut;
 
-	cIn = SPI_I2S_ReceiveData(SPI1);
-	xQueueSendFromISR(xSPI1_RX_Queue, &cIn, NULL);
-	if (xQueueReceiveFromISR(xSPI1_TX_Queue, &cOut, NULL))
+	cIn = SPI_I2S_ReceiveData(SPI2);
+	xQueueSendFromISR(xSPI_RX_Queue, &cIn, NULL);
+	if (xQueueReceiveFromISR(xSPI_TX_Queue, &cOut, NULL))
 	{
-		SPI_I2S_SendData(SPI1, cOut);
+		SPI_I2S_SendData(SPI2, cOut);
 	}
 }

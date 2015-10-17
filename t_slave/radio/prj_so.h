@@ -33,16 +33,23 @@
 // External variables
 extern uint32_t systime;
 extern uint32_t SPI_idx;
+
 extern char* SPI_TX_bufptr;
 extern char* SPI_RX_bufptr;
+
 extern char SPI_TX_buf[];
 extern char SPI_RX_buf[];
+
 extern char SPI_NULL_buf[];
+
 extern uint8_t SPI_buf_idx;
+
 extern SemaphoreHandle_t xNRF_IRQ_Semaphore;
-extern SemaphoreHandle_t xSPI1_Mutex;
-extern QueueHandle_t xSPI1_RX_Queue;
-extern QueueHandle_t xSPI1_TX_Queue;
+
+extern SemaphoreHandle_t xSPI_Mutex;
+
+extern QueueHandle_t xSPI_RX_Queue;
+extern QueueHandle_t xSPI_TX_Queue;
 
 
 
