@@ -15,7 +15,6 @@ int main()
 //		printf("\r\n----------------------------------------------------------------------------------");	
 		
 		
-		
 		//-------------------------------------------------tasks start------------------------------------------------
 		
 //		xTaskCreate(vRadioTask,(const char*)"RadioTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
