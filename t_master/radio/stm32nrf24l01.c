@@ -1,9 +1,7 @@
 //==============================================================================
 // Include files
-#include "stm32_nrf24l01.h"
-#include "stm32_nrf24l01regs.h"
-#include "prj_so.h"
-#include "prj_config.h"
+#include "stm32nrf24l01.h"
+
 //==============================================================================
 // Defines
 #define NRF24L01_CLEAR_INTERRUPTS			NRF24L01_WriteBit(7, 4, Bit_SET); NRF24L01_WriteBit(7, 5, Bit_SET); NRF24L01_WriteBit(7, 6, Bit_SET)
@@ -65,7 +63,7 @@ uint8_t SPI_Send(uint8_t dataOut)
 	
 	xSemaphoreTake(xSPI_Mutex, portMAX_DELAY);
 	
-	SPI_I2S_SendData(NRF24L01_SPI, dataOut);
+	SPI_I2S_SendData(SPI_PORT, dataOut);
 	
 	xQueueReceive(xSPI_RX_Queue, &cIn, NULL);
 	
@@ -80,18 +78,18 @@ void SPI_ReadMulti(  uint8_t* dataIn,
 {
 	uint32_t i;
 	
-	xSemaphoreTake(xSPI1_Mutex, portMAX_DELAY);
+	xSemaphoreTake(xSPI_Mutex, portMAX_DELAY);
 	
 	for (i = 1; i < count; i++) 
 	{
 		xQueueSend(xSPI_TX_Queue, &dummy, portMAX_DELAY);
 	}
 	
-	SPI_I2S_SendData(NRF24L01_SPI, dummy);
+	SPI_I2S_SendData(SPI_PORT, dummy);
 	
 	for (i = 0; i < count; i++)
 	{
-		xQueueReceive(xSPI1_RX_Queue, &dataIn[i], NULL);
+		xQueueReceive(xSPI_RX_Queue, &dataIn[i], NULL);
 	}
 	
 	xSemaphoreGive(xSPI_Mutex);
@@ -107,17 +105,17 @@ void SPI_WriteMulti( uint8_t* dataOut,
 	
 	for (i = 1; i < count; i++)
 	{	
-		xQueueSend(xSPI1_TX_Queue, &dataOut[i], portMAX_DELAY);
+		xQueueSend(xSPI_TX_Queue, &dataOut[i], portMAX_DELAY);
 	}
 	
-	SPI_I2S_SendData(NRF24L01_SPI, dataOut[0]);
+	SPI_I2S_SendData(SPI_PORT, dataOut[0]);
 	
 	for (i = 0; i < count; i++) 
 	{
-		xQueueReceive(xSPI1_RX_Queue, &cIn, NULL);
+		xQueueReceive(xSPI_RX_Queue, &cIn, NULL);
 	}
 	
-	xSemaphoreGive(xSPI1_Mutex);
+	xSemaphoreGive(xSPI_Mutex);
 }
 
 void SPI_SendMulti(	 uint8_t* dataOut,
@@ -126,21 +124,21 @@ void SPI_SendMulti(	 uint8_t* dataOut,
 {
 	uint32_t i;
 	
-	xSemaphoreTake(xSPI1_Mutex, portMAX_DELAY);
+	xSemaphoreTake(xSPI_Mutex, portMAX_DELAY);
 	
 	for (i = 1; i < count; i++)
 	{
-		xQueueSend(xSPI1_TX_Queue, &dataOut[i], portMAX_DELAY);
+		xQueueSend(xSPI_TX_Queue, &dataOut[i], portMAX_DELAY);
 	}
 	
-	SPI_I2S_SendData(NRF24L01_SPI, dataOut[0]);
+	SPI_I2S_SendData(SPI_PORT, dataOut[0]);
 	
 	for (i = 0; i < count; i++) 
 	{
-		xQueueReceive(xSPI1_RX_Queue, &dataIn[i], NULL);
+		xQueueReceive(xSPI_RX_Queue, &dataIn[i], NULL);
 	}
 	
-	xSemaphoreGive(xSPI1_Mutex);
+	xSemaphoreGive(xSPI_Mutex);
 }
 /* SPI function END*/
 

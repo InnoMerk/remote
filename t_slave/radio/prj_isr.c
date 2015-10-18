@@ -34,8 +34,8 @@ void EXTI2_IRQHandler(void) // nRF24_IRQ_PIN
 
 void SPI2_IRQHandler(void)
 {
-char cIn;
-char cOut;
+	char cIn;
+	char cOut;
 
 	cIn = SPI_I2S_ReceiveData(SPI2);
 	xQueueSendFromISR(xSPI_RX_Queue, &cIn, NULL);

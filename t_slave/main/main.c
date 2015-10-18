@@ -17,16 +17,81 @@ int main()
 		
 		//-------------------------------------------------tasks start------------------------------------------------
 		
-//		xTaskCreate(vRadioTask,(const char*)"RadioTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-		xTaskCreate(vLedTask,(const char*)"LedTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-		xTaskCreate(vGetLoadCPU,(const char*)"getLoadCPU",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+	  
+		xTaskCreate( vLedTask,
+		             (const char*)"LedTask",
+								 configMINIMAL_STACK_SIZE,
+								 NULL,
+								 tskIDLE_PRIORITY + 1,
+								 NULL
+							  );
+								 
+		xTaskCreate(  vGetLoadCPU,
+								 (const char*)"getLoadCPU",
+									configMINIMAL_STACK_SIZE,
+ 								  NULL,
+ 								  tskIDLE_PRIORITY + 1,
+ 								  NULL
+							 );
 		
-		xTaskCreate(vModeTask,(const char*)"modeTask",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-	  xTaskCreate(vLimitSwitchTask,(const char*)"limitTask",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-		xTaskCreate(vControlTask,(const char*)"controlTask",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+		xTaskCreate( vModeTask,
+								 (const char*)"modeTask",
+								 configMINIMAL_STACK_SIZE,
+								 NULL,
+								 tskIDLE_PRIORITY + 1,
+								 NULL
+							 );
+								 
+	  xTaskCreate(vLimitSwitchTask,
+								(const char*)"limitTask",
+								configMINIMAL_STACK_SIZE,
+								NULL,
+								tskIDLE_PRIORITY + 1,
+								NULL
+								);
+		xTaskCreate(vControlTask,
+								(const char*)"controlTask",
+								configMINIMAL_STACK_SIZE,
+								NULL,
+								tskIDLE_PRIORITY + 1,
+								NULL
+								);
 	 // xTaskCreate(vMoveTask,(const char*)"moveTask",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-		xTaskCreate(vLcdTask,(const char*)"lcdTask",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-		xTaskCreate(vHitTask,(const char*)"HitTask",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+		xTaskCreate(vLcdTask,
+							 (const char*)"lcdTask",
+							  configMINIMAL_STACK_SIZE,
+ 							  NULL,
+ 							  tskIDLE_PRIORITY + 1,
+							  NULL
+							 );
+							 
+		xTaskCreate(vHitTask,
+							 (const char*)"HitTask",
+								configMINIMAL_STACK_SIZE,
+							  NULL,
+							  tskIDLE_PRIORITY + 1,
+							  NULL
+							 );
+		
+/*		xTaskCreate(vTransmitTask,"Transmitter",
+							  configMINIMAL_STACK_SIZE,
+ 							  NULL,
+							  tskIDLE_PRIORITY + 1,
+							  NULL
+							 );
+		xTaskCreate(vRecieveTask,"Reciever",
+							  configMINIMAL_STACK_SIZE,
+							  NULL,
+							  tskIDLE_PRIORITY + 1,
+							  NULL)		
+*/
+
+		xTaskCreate( vTransmitTask,
+							  "Retranslator",
+								configMINIMAL_STACK_SIZE,
+								NULL,
+								tskIDLE_PRIORITY + 1,
+								NULL);						
 		
 		vTaskStartScheduler();  //
 		

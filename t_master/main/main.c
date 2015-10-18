@@ -13,15 +13,41 @@ int main()
 		
 		//-------------------------------------------------tasks start------------------------------------------------
 		
-		xTaskCreate(vLedTask,(const char*)"LedTask", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-		xTaskCreate(vGetLoadCPU,(const char*)"getLoadCPU",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+		xTaskCreate( vLedTask,
+		                    (const char*)"LedTask",
+						    configMINIMAL_STACK_SIZE,
+						    NULL,
+						    tskIDLE_PRIORITY + 1,
+						    NULL);
 		
+		xTaskCreate( vGetLoadCPU,
+		                     (const char*)"getLoadCPU",
+							 configMINIMAL_STACK_SIZE,
+							 NULL,
+							 tskIDLE_PRIORITY + 1,
+							 NULL);
+			 
+		xTaskCreate(vLcdTask,
+		                    (const char*)"lcdTask",
+							configMINIMAL_STACK_SIZE,
+							NULL,
+							tskIDLE_PRIORITY + 1,
+							NULL);
+							
+	  xTaskCreate(vTransmitTask,
+		                    (const char*)"transmit",
+							configMINIMAL_STACK_SIZE,
+							NULL,
+							tskIDLE_PRIORITY + 1,
+							NULL);
+		xTaskCreate(vReceiveTask,
+		                    (const char*)"receive",
+							configMINIMAL_STACK_SIZE,
+							NULL,
+							tskIDLE_PRIORITY + 1,
+							NULL);										
 		
-	 
-		xTaskCreate(vLcdTask,(const char*)"lcdTask",configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-	
-		
-		vTaskStartScheduler();  //
+		vTaskStartScheduler();  //l88
 		
 		for(;;){__NOP();}
 	}
