@@ -1,7 +1,6 @@
 #include "radioTask.h"
 #include "led.h"
 
-
 uint32_t systime;
 uint32_t SPI_idx;
 
@@ -25,7 +24,7 @@ QueueHandle_t xSPI_TX_Queue;
  
 
 	
-void vTransmitTask (void *pvParameters)
+void vTranceiveTask (void *pvParameters)
 {
 	xNRF_IRQ_Semaphore = xSemaphoreCreateBinary();
 	xSPI_Mutex = xSemaphoreCreateMutex();
@@ -34,49 +33,41 @@ void vTransmitTask (void *pvParameters)
   SystemInit();
   radiomodule_hardware_init();
 	
-	static uint8_t dataOut[32], i;
-	uint32_t tr_count;
 	NRF24L01_Transmit_Status_t transmissionStatus;
-
-	init_NRF24L01();
-
-	for (i = 0; i < 32; i++)
+	uint8_t dataIn[32];
+	uint32_t rx_count = 0;
+	initr_NRF24L01();
+	while (1)
 	{
-		dataOut[i] = i + 30;
-	}
-
-  while (1)
-  {
-    NRF24L01_Transmit(dataOut);
-    GPIO_SetBits(GPIOC,GREEN);
-    do 
+		if(xSemaphoreTake(xNRF_IRQ_Semaphore, portMAX_DELAY)==pdTRUE)
 		{
-			vTaskDelay(1);
-			transmissionStatus = NRF24L01_GetTransmissionStatus();
-		}
-    while (transmissionStatus == NRF24L01_Transmit_Status_Sending);
-    GPIO_ResetBits(GPIOC,GREEN);
-    NRF24L01_PowerUpRx();
-    if (transmissionStatus == NRF24L01_Transmit_Status_Ok)
-    {
-			dataOut[0] = tr_count++;
-    }
-    vTaskDelay(500/portTICK_PERIOD_MS);
-  }
+			GPIO_SetBits(GPIOC,BLUE);
+		
+			NRF24L01_GetData(dataIn);
+		
+			rx_count++;
+		
+			vTaskDelay(50);
+			
+		
+			NRF24L01_Transmit(dataIn);
+		
+			do 
+			{
+				vTaskDelay(1);
+				transmissionStatus = NRF24L01_GetTransmissionStatus();
+			}
+			while (transmissionStatus == NRF24L01_Transmit_Status_Sending);
+			
+			NRF24L01_PowerUpRx();
+			GPIO_ResetBits(GPIOC,BLUE);
+		}	
+		vTaskDelay(100/portTICK_PERIOD_MS);
+	}	
 	vTaskDelete(NULL);
 }
 
-void vReceiveTask (void *pvParameters)
-{
-	uint8_t dataIn[32];
-	uint32_t rx_count = 0;
-	while (1)
-	{
-		xSemaphoreTake(xNRF_IRQ_Semaphore, portMAX_DELAY);
-		NRF24L01_GetData(dataIn);
-		rx_count++;
-	}  
-} 
+
  
 //-----------------------------------------------------------------------------------------
  void EXTI2_IRQHandler(void) // nRF24_IRQ_PIN

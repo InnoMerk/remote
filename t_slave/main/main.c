@@ -86,7 +86,7 @@ int main()
 							  NULL)		
 */
 
-		xTaskCreate( vTransmitTask,
+		xTaskCreate( vTranceiveTask,
 							  "Retranslator",
 								configMINIMAL_STACK_SIZE,
 								NULL,

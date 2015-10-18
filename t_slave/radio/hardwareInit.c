@@ -1,26 +1,25 @@
 //==============================================================================
 // Include files
-#include "stm32f10x.h"
-#include "stm32f10x_spi.h"
-#include "misc.h"
-#include "prj_extperiph.h"
+#include "hardwareInit.h"
+
 
 //==============================================================================
 // Defines
-#define APB2PeripheralClkEnabled (\ RCC_APB2Periph_GPIOB |	\
-													RCC_APB2Periph_AFIO   |	\
-													RCC_APB2Periph_SPI1		)
+
 
 void init_rcc(void)
 {
-	RCC_APB2PeriphClockCmd(APB2PeripheralClkEnabled, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2	, ENABLE);
+	
 }
 
 
 void init_gpio(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-	EXTI_InitTypeDef EXTIInit;
+	EXTI_InitTypeDef exti;
 
 	GPIO_StructInit(&GPIO_InitStructure);
  
@@ -64,15 +63,19 @@ void init_gpio(void)
 	GPIO_EXTILineConfig(NRF24L01_PORTSOURCE, NRF24L01_PINSOURCE);
 	
 	// Configure EXTI line1
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource2);
+	// Configure EXTI line1
+	EXTI_StructInit(&exti);
 	
-	EXTI_StructInit(&EXTIInit);
 	
-	EXTIInit.EXTI_Line =        NRF24L01_IRQ_LINE;          		// EXTI will be on line 2
-	EXTIInit.EXTI_LineCmd =  ENABLE;                                   // EXTI1 enabled
-	EXTIInit.EXTI_Mode =      EXTI_Mode_Interrupt;                 // Generate IRQ
-	EXTIInit.EXTI_Trigger =    EXTI_Trigger_Falling;                  // IRQ on signal falling
 	
-	EXTI_Init(&EXTIInit);
+	
+	exti.EXTI_Line =        NRF24L01_IRQ_LINE;          		// EXTI will be on line 2
+	exti.EXTI_LineCmd =  		ENABLE;                                   // EXTI1 enabled
+	exti.EXTI_Mode =     		EXTI_Mode_Interrupt;                 // Generate IRQ
+	exti.EXTI_Trigger =    	EXTI_Trigger_Falling;                  // IRQ on signal falling
+	
+	EXTI_Init(&exti);
 
 }
 
@@ -117,14 +120,14 @@ void init_spi(void)
 	SPI_Init(SPI_PORT, &SPI_InitStructure);
 	
 	// NSS must be set to '1' due to NSS_Soft settings (otherwise it will be Multi-master mode).
-	SPI_NSSInternalSoftwareConfig( NRF24L01_SPI,
+	SPI_NSSInternalSoftwareConfig( SPI_PORT,
 	                                             SPI_NSSInternalSoft_Set);
  	NRF24L01_CSN_HIGH();
 	NRF24L01_CE_LOW();
 	
- 	SPI_Cmd(NRF24L01_SPI,ENABLE);
+ 	SPI_Cmd(SPI_PORT,ENABLE);
 	
-	SPI_I2S_ITConfig(NRF24L01_SPI, SPI_I2S_IT_RXNE, ENABLE);
+	SPI_I2S_ITConfig(SPI_PORT, SPI_I2S_IT_RXNE, ENABLE);
 }
 
 void radiomodule_hardware_init (void)

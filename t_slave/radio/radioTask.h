@@ -32,7 +32,7 @@
 #include "stm32nrf24l01regs.h"
 #include "stm32nrf24l01.h"	
 	
-//-----------------------------------------------------------	
+//---------------------------------------------------------	
 extern uint32_t systime;
 extern uint32_t SPI_idx;
 
@@ -53,8 +53,8 @@ extern SemaphoreHandle_t xSPI_Mutex;
 extern QueueHandle_t xSPI_RX_Queue;
 extern QueueHandle_t xSPI_TX_Queue;
 
-void vReceiveTask (void *pvParameters);
-void vTransmitTask (void *pvParameters);
+
+void vTranceiveTask (void *pvParameters);
 
 
 

@@ -29,6 +29,7 @@
 	#include "controlTask.h"
 	#include "lcdTask.h"
 	#include "moveTask.h"
+	#include "radioTask.h"
 #endif
 	 
 	//------------------------------------------global variable-------------------------------------

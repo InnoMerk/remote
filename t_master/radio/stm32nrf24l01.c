@@ -314,8 +314,8 @@ void NRF24L01_ReadRegisterMulti( uint8_t reg,
 	NRF24L01_CSN_HIGH();
 }
 
-void NRF24L01_WriteRegister(uint8_t reg,
-                                          uint8_t value) 
+void NRF24L01_WriteRegister( uint8_t reg,
+                             uint8_t value) 
 {
 	NRF24L01_CSN_LOW();
 	

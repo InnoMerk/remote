@@ -169,5 +169,5 @@
 #define NRF24L01_TRANSMISSON_OK 			         0
 #define NRF24L01_MESSAGE_LOST   			         1
 
-#define NRF24L01_CHECK_BIT(reg,bit)		(reg & (1 << bit))
+#define NRF24L01_CHECK_BIT(reg,bit)		(reg & (1 << bit)) /**/
 

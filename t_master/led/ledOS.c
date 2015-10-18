@@ -14,14 +14,14 @@ void vLedTask (void *pvParameters)
 			
 			if (state == 0)
 			{
-					GPIO_ResetBits(GPIOC,GREEN);
+					//GPIO_ResetBits(GPIOC,GREEN);
 				    GPIO_SetBits(GPIOC,BLUE);
 					state = 1;
 			}
 			else
 			{
 					
-				  GPIO_SetBits(GPIOC,GREEN);
+				 // GPIO_SetBits(GPIOC,GREEN);
 				  GPIO_ResetBits(GPIOC,BLUE);
 					state = 0;
 			}
