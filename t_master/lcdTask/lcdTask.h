@@ -13,7 +13,7 @@
 	#include "queue.h"
 	
 	#include "loadCPU.h"
- 
+	#include "modeTask.h"
 
 	
   void vLcdTask (void *pvParameters); 

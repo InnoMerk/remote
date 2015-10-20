@@ -45,7 +45,14 @@ int main()
 							configMINIMAL_STACK_SIZE,
 							NULL,
 							tskIDLE_PRIORITY + 1,
-							NULL);							
+							NULL);	
+		xTaskCreate( vModeTask,
+								 (const char*)"modeTask",
+								 configMINIMAL_STACK_SIZE,
+								 NULL,
+								 tskIDLE_PRIORITY + 1,
+								 NULL
+							 );												
 		
 		vTaskStartScheduler();  //l88
 		

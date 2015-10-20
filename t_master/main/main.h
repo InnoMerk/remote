@@ -25,6 +25,7 @@
 	#include "loadCPU.h"
 	#include "lcdTask.h"
 	#include "radioTask.h"
+	#include "modeTask.h"
 #endif
 	 
 	//------------------------------------------global variable-------------------------------------

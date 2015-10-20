@@ -28,6 +28,7 @@
 #include "queue.h"
 	
 #include "loadCPU.h"
+#include "modeTask.h"
 
 #include "hardwareInit.h"
 #include "stm32nrf24l01regs.h"
