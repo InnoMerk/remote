@@ -52,7 +52,7 @@ typedef enum
 
 //----------------------------------------------------------------------------------------------
 //  prototypes
-//--------------------------------------------------------------------------------------------	
+//----------------------------------------------------------------------------------------------	
 void NRF24L01_PowerUpTx(void);
 void NRF24L01_PowerUpRx(void);
 void NRF24L01_PowerDown(void);
@@ -68,8 +68,8 @@ void NRF24L01_Transmit(uint8_t *data);
 void NRF24L01_GetData(uint8_t *data);
 void NRF24L01_SetChannel(uint8_t channel);
 
-void NRF24L01_SetRF( NRF24L01_DataRate_t        DataRate,
-                                    NRF24L01_OutputPower_t  OutPwr);
+void NRF24L01_SetRF( NRF24L01_DataRate_t     DataRate,
+                     NRF24L01_OutputPower_t  OutPwr);
 
 NRF24L01_Transmit_Status_t NRF24L01_GetTransmissionStatus(void);
 

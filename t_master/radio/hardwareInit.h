@@ -21,9 +21,9 @@
 
 /* IRQ */
 #define NRF24L01_IRQ_PORT          GPIOB   				   // PORT B
-#define NRF24L01_IRQ_LINE          EXTI_Line1   			   // Line2
-#define NRF24L01_IRQ_PIN           GPIO_Pin_1   		   // Pin2
-#define NRF24L01_PINSOURCE         GPIO_PinSource1	   // Pin2
+#define NRF24L01_IRQ_LINE          EXTI_Line1   			   // Line1
+#define NRF24L01_IRQ_PIN           GPIO_Pin_1   		   // Pin1
+#define NRF24L01_PINSOURCE         GPIO_PinSource1	   // Pin1
 #define NRF24L01_PORTSOURCE        GPIO_PortSourceGPIOB
 #define NRF24L01_IRQ_CHANNEL       EXTI1_IRQn
 

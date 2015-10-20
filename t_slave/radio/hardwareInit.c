@@ -1,4 +1,4 @@
-//==============================================================================
+//==============================================================================--
 // Include files
 #include "hardwareInit.h"
 
@@ -11,6 +11,7 @@ void init_rcc(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2ENR_AFIOEN , ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2	, ENABLE);
 	
 }
@@ -55,18 +56,11 @@ void init_gpio(void)
 	GPIO_InitStructure.GPIO_Pin = NRF24L01_IRQ_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(NRF24L01_IRQ_PORT,&GPIO_InitStructure);
-
-	
-
-	// EXTI pin
 	
 	GPIO_EXTILineConfig(NRF24L01_PORTSOURCE, NRF24L01_PINSOURCE);
-	
-	// Configure EXTI line1
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource2);
 	// Configure EXTI line1
 	EXTI_StructInit(&exti);
-	
+	EXTI_ClearITPendingBit(NRF24L01_IRQ_LINE);
 	
 	
 	
@@ -95,12 +89,12 @@ void init_nvic()
 	
 	/* Configure EXTI interrupt (NRF24L01 IRQ) */
 	
-	NVIC_InitStructure.NVIC_IRQChannel =                          NRF24L01_IRQ_CHANNEL;
+	NVIC_InitStructure.NVIC_IRQChannel =                       NRF24L01_IRQ_CHANNEL;
 	NVIC_InitStructure.NVIC_IRQChannelCmd =                    ENABLE;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x0B;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority =     0x0B;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority =            0;
 	NVIC_Init(&NVIC_InitStructure);
-
+	NVIC_EnableIRQ (EXTI1_IRQn);
 }
 
 void init_spi(void)

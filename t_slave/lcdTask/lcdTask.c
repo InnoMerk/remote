@@ -13,19 +13,19 @@ void vLcdTask (void *pvParameters)
 	
 	for(;;)
 	{
-		if( xQueueReceive( xCPUloadLCD, &lcdCPU, ( TickType_t ) 10 ) )
-    {
-			continue;	
-		}		
-		if( xQueueReceive( xModeQueueLCD, &lcdMode, ( TickType_t ) 10) )
+//		if( xQueueReceive( xCPUloadLCD, &lcdCPU, ( TickType_t ) NULL ) )
+//    {
+//			continue;	
+//		}		
+		if( xQueueReceive( xModeQueueLCD, &lcdMode, ( TickType_t ) NULL) )
     {
       continue; 
     }
-		if( xQueueReceive( xLimiterQueueLCD, &lcdLimit, ( TickType_t )10 ) )
+		if( xQueueReceive( xLimiterQueueLCD, &lcdLimit, ( TickType_t )NULL ) )
     {
 			continue;  
     }
-		if( xQueueReceive( xHitQueueLCD, &lcdHit, ( TickType_t ) 10 ) )
+		if( xQueueReceive( xHitQueueLCD, &lcdHit, ( TickType_t ) NULL ) )
     {
 			continue;  
     }

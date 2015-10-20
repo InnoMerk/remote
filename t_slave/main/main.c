@@ -26,13 +26,13 @@ int main()
 								 NULL
 							  );
 								 
-		xTaskCreate(  vGetLoadCPU,
-								 (const char*)"getLoadCPU",
-									configMINIMAL_STACK_SIZE,
- 								  NULL,
- 								  tskIDLE_PRIORITY + 1,
- 								  NULL
-							 );
+//		xTaskCreate(  vGetLoadCPU,
+//								 (const char*)"getLoadCPU",
+//									configMINIMAL_STACK_SIZE,
+// 								  NULL,
+// 								  tskIDLE_PRIORITY + 1,
+// 								  NULL
+//							 );
 		
 		xTaskCreate( vModeTask,
 								 (const char*)"modeTask",
@@ -73,18 +73,7 @@ int main()
 							  NULL
 							 );
 		
-/*		xTaskCreate(vTransmitTask,"Transmitter",
-							  configMINIMAL_STACK_SIZE,
- 							  NULL,
-							  tskIDLE_PRIORITY + 1,
-							  NULL
-							 );
-		xTaskCreate(vRecieveTask,"Reciever",
-							  configMINIMAL_STACK_SIZE,
-							  NULL,
-							  tskIDLE_PRIORITY + 1,
-							  NULL)		
-*/
+
 
 		xTaskCreate( vTranceiveTask,
 							  "Retranslator",

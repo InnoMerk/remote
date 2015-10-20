@@ -1,7 +1,7 @@
 #include "main.h"
 
 void gpio_init(void);
-
+uint8_t status_trace=0;
 int main()
 	{
 		//-------------------------------------------------start initialisation---------------------------------------
@@ -45,7 +45,7 @@ int main()
 							configMINIMAL_STACK_SIZE,
 							NULL,
 							tskIDLE_PRIORITY + 1,
-							NULL);										
+							NULL);							
 		
 		vTaskStartScheduler();  //l88
 		

@@ -26,6 +26,7 @@ QueueHandle_t xSPI_TX_Queue;
 	
 void vTranceiveTask (void *pvParameters)
 {
+	vTaskDelay(5000/portTICK_PERIOD_MS);
 	xNRF_IRQ_Semaphore = xSemaphoreCreateBinary();
 	xSPI_Mutex = xSemaphoreCreateMutex();
 	xSPI_RX_Queue = xQueueCreate(64, sizeof(char));
@@ -39,7 +40,8 @@ void vTranceiveTask (void *pvParameters)
 	initr_NRF24L01();
 	while (1)
 	{
-		if(xSemaphoreTake(xNRF_IRQ_Semaphore, portMAX_DELAY)==pdTRUE)
+		transmissionStatus = NRF24L01_GetTransmissionStatus();
+		if(xSemaphoreTake(xNRF_IRQ_Semaphore, 100)==pdTRUE)
 		{
 			GPIO_SetBits(GPIOC,BLUE);
 		
@@ -61,8 +63,11 @@ void vTranceiveTask (void *pvParameters)
 			
 			NRF24L01_PowerUpRx();
 			GPIO_ResetBits(GPIOC,BLUE);
+		}
+		else
+		{		
+				vTaskDelay(100/portTICK_PERIOD_MS);
 		}	
-		vTaskDelay(100/portTICK_PERIOD_MS);
 	}	
 	vTaskDelete(NULL);
 }
@@ -70,7 +75,7 @@ void vTranceiveTask (void *pvParameters)
 
  
 //-----------------------------------------------------------------------------------------
- void EXTI2_IRQHandler(void) // nRF24_IRQ_PIN
+ void EXTI1_IRQHandler(void) // nRF24_IRQ_PIN
 {
 	EXTI_ClearITPendingBit(NRF24L01_IRQ_LINE);
 	xSemaphoreGiveFromISR(xNRF_IRQ_Semaphore, NULL);

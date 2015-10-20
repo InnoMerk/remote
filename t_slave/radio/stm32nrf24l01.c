@@ -154,8 +154,8 @@ uint8_t NRF24L01_Init( uint8_t channel,
 	/* Fill structure */
 	NRF24L01_Struct.Channel = !channel; /* Set channel to some different value for NRF24L01_SetChannel() function */
 	NRF24L01_Struct.PayloadSize = payload_size;
-	NRF24L01_Struct.OutPwr = NRF24L01_OutputPower_0dBm;
-	NRF24L01_Struct.DataRate = NRF24L01_DataRate_250k;
+	NRF24L01_Struct.OutPwr = NRF_TX_POWER;
+	NRF24L01_Struct.DataRate = NRF_DATARATE;
 
 	/* Reset nRF24L01+ to power on registers values */
 	NRF24L01_SoftwareReset();
@@ -314,8 +314,8 @@ void NRF24L01_ReadRegisterMulti( uint8_t reg,
 	NRF24L01_CSN_HIGH();
 }
 
-void NRF24L01_WriteRegister(uint8_t reg,
-                                          uint8_t value) 
+void NRF24L01_WriteRegister( uint8_t reg,
+                             uint8_t value) 
 {
 	NRF24L01_CSN_LOW();
 	
@@ -459,7 +459,7 @@ NRF24L01_Transmit_Status_t NRF24L01_GetTransmissionStatus(void)
 		if (NRF24L01_CHECK_BIT(status, NRF24L01_MAX_RT)) 
 		{
 		/* Message lost */
-			return NRF24L01_Transmit_Status_Lost;
+			return status;
 		}
 
 	/* Still sending */

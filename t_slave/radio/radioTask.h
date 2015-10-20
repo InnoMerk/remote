@@ -5,9 +5,10 @@
 #define REMOTE_NRF_ADDRESS {0x7E,0x7E,0x7E,0x7E,0x7E};
 #define NRF_CHANNEL 15
 #define NRF_PAYLOAD 32              /* max = 32 bytes */
-#define NRF_DATARATE NRF24L01_DataRate_250k
-#define NRF_TX_POWER NRF24L01_OutputPower_0dBm
-
+//#define NRF_DATARATE NRF24L01_DataRate_250k
+//#define NRF_TX_POWER NRF24L01_OutputPower_0dBm
+#define NRF_DATARATE NRF24L01_DataRate_2M
+#define NRF_TX_POWER NRF24L01_OutputPower_M18dBm
 
 
 #include "stm32f10x.h"
@@ -32,7 +33,7 @@
 #include "stm32nrf24l01regs.h"
 #include "stm32nrf24l01.h"	
 	
-//---------------------------------------------------------	
+//-----------------------------------------------------------	
 extern uint32_t systime;
 extern uint32_t SPI_idx;
 

@@ -163,11 +163,11 @@
 #define NRF24L01_FLUSH_TX_MASK				     0xE1
 #define NRF24L01_FLUSH_RX_MASK				     0xE2
 #define NRF24L01_REUSE_TX_PL_MASK			     0xE3
-#define NRF24L01_ACTIVATE_MASK				         0x50
+#define NRF24L01_ACTIVATE_MASK				     0x50
 #define NRF24L01_R_RX_PL_WID_MASK			     0x60
 #define NRF24L01_NOP_MASK							     0xFF
 #define NRF24L01_TRANSMISSON_OK 			         0
 #define NRF24L01_MESSAGE_LOST   			         1
 
-#define NRF24L01_CHECK_BIT(reg,bit)		(reg & (1 << bit))
+#define NRF24L01_CHECK_BIT(reg,bit)		(reg & (1 << bit)) /**/
 
