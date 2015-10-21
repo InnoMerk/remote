@@ -24,7 +24,7 @@ void vLcdTask (void *pvParameters)
     }
 		lcd_clrscr();
 		lcd_goto(2,0);		
-		lcd_puts("S:");
+		lcd_puts("S^:");
 		lcd_goto(1,0);		
 		lcd_puts("M:");
 		lcd_itos(lcdCPU);

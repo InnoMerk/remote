@@ -54,6 +54,7 @@ extern SemaphoreHandle_t xSPI_Mutex;
 
 extern QueueHandle_t xSPI_RX_Queue;
 extern QueueHandle_t xSPI_TX_Queue;
+extern QueueHandle_t xQueueRemoteLCD;
 
 void vReceiveTask (void *pvParameters);
 void vTransmitTask (void *pvParameters);

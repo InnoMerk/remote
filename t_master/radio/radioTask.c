@@ -9,8 +9,10 @@
 #define COMMAND_GETSTATE 0x22
 #define COMMAND_SETMODE  0x33 
 
-void transmit_package(uint8_t *data);
-void message_assembly(uint8_t *package,uint8_t mode);
+void transmit_package(uint8_t* data);
+void tx_message_assembly(uint8_t* package,uint8_t mode);
+void rx_message_parse(uint8_t* package,uint16_t* report);
+	
 uint32_t systime;
 uint32_t SPI_idx;
 
@@ -30,7 +32,8 @@ SemaphoreHandle_t xSPI_Mutex;
 
 QueueHandle_t xSPI_RX_Queue;
 QueueHandle_t xSPI_TX_Queue;
-	
+
+QueueHandle_t xQueueRemoteLCD;	
  
 
 	
@@ -63,7 +66,7 @@ void vTransmitTask (void *pvParameters)
       continue; 
     }
 		
-		message_assembly(dataOut,masterMode);
+		tx_message_assembly(dataOut,masterMode);
 		transmit_package(dataOut);
 			
 		
@@ -75,17 +78,22 @@ void vTransmitTask (void *pvParameters)
 
 void vReceiveTask (void *pvParameters)
 {
+	xQueueRemoteLCD = xQueueCreate(2,sizeof(uint16_t));
 	uint8_t dataIn[32];
 	uint32_t rx_count = 0;
 	vTaskDelay(5000/portTICK_PERIOD_MS);
-	while (1)
+	
+	for(;;)
 	{
+		uint16_t tmp=0;
 		if(xSemaphoreTake(xNRF_IRQ_Semaphore, 100)==pdTRUE)
 		{	
 			NRF24L01_GetData(dataIn);
-			rx_count++;
+			
+			rx_message_parse(dataIn,&tmp);
+			
 			GPIO_ResetBits(GPIOC,GREEN);
-		vTaskDelay(50/portTICK_PERIOD_MS);
+			vTaskDelay(50/portTICK_PERIOD_MS);
 		}	
 		else
 		{	
@@ -113,8 +121,33 @@ void SPI2_IRQHandler(void)
 		SPI_I2S_SendData(SPI2, cOut);
 	}
 }
-
-void message_assembly(uint8_t *package,uint8_t mode)
+void rx_message_parse(uint8_t* package, uint16_t* report)
+{
+//adress confirm
+switch (package[4])
+		{
+			//--------------------
+			case COMMAND_GETSTATE:
+			{
+				*report = (uint16_t)(package[5]<<8);
+				*report|=  package[6];
+				break;
+			}
+			//---------------------
+			case COMMAND_SETMODE:
+			{
+				*report = (uint16_t)(package[5]<<8);
+				*report|=  package[7];
+				break;	
+			}
+			//---------------------
+			default:
+			{	
+					
+			}	
+		}	
+}
+void tx_message_assembly(uint8_t *package,uint8_t mode)
 {
 	__NOP();
 	package[0]=ADR_0;
