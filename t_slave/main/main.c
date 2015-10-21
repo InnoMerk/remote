@@ -26,13 +26,13 @@ int main()
 								 NULL
 							  );
 								 
-//		xTaskCreate(  vGetLoadCPU,
-//								 (const char*)"getLoadCPU",
-//									configMINIMAL_STACK_SIZE,
-// 								  NULL,
-// 								  tskIDLE_PRIORITY + 1,
-// 								  NULL
-//							 );
+		xTaskCreate(  vGetLoadCPU,
+								 (const char*)"getLoadCPU",
+									configMINIMAL_STACK_SIZE,
+ 								  NULL,
+ 								  tskIDLE_PRIORITY + 1,
+ 								  NULL
+							 );
 		
 		xTaskCreate( vModeTask,
 								 (const char*)"modeTask",
@@ -65,16 +65,13 @@ int main()
 							  NULL
 							 );
 							 
-		xTaskCreate(vHitTask,
-							 (const char*)"HitTask",
-								configMINIMAL_STACK_SIZE,
-							  NULL,
-							  tskIDLE_PRIORITY + 1,
-							  NULL
-							 );
-		
-
-
+//		xTaskCreate(vHitTask,
+//							 (const char*)"HitTask",
+//								configMINIMAL_STACK_SIZE,
+//							  NULL,
+//							  tskIDLE_PRIORITY + 1,
+//							  NULL
+//							 );
 		xTaskCreate( vTranceiveTask,
 							  "Retranslator",
 								configMINIMAL_STACK_SIZE,

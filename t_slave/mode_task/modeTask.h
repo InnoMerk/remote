@@ -13,9 +13,8 @@
 #define UP_LIMIT           30
 #define DOWN_LIMIT         40 
 
-
-#define SHOT               10
-#define EMPTY              20
+#define SHOT               50
+#define EMPTY              60
 
 #define FORWARD            10
 #define REVERSE            20

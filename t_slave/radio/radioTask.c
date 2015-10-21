@@ -41,7 +41,7 @@ void vTranceiveTask (void *pvParameters)
 	while (1)
 	{
 		transmissionStatus = NRF24L01_GetTransmissionStatus();
-		if(xSemaphoreTake(xNRF_IRQ_Semaphore, 100)==pdTRUE)
+		if(xSemaphoreTake(xNRF_IRQ_Semaphore, 10)==pdTRUE)
 		{
 			GPIO_SetBits(GPIOC,BLUE);
 		

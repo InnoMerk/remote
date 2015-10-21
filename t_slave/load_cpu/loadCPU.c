@@ -5,14 +5,14 @@
 void vGetLoadCPU( void *pvParameters )
 {
 uint8_t  cpuLCD;
-xCPUloadLCD=xQueueCreate( 8, sizeof( uint8_t ) );	
+xCPUloadLCD=xQueueCreate( 4, sizeof( uint8_t ) );	
 
  while (1) 
 			{
 			
 				
 			 cpuLCD=	(100 - GetCPU_IDLE());
-			 xQueueSend( xCPUloadLCD,  &cpuLCD, ( TickType_t ) 10 ); 	//and sending calculated speeds in a queue to log and display
+			 xQueueSend( xCPUloadLCD,  &cpuLCD, ( TickType_t ) 0 ); 	//and sending calculated speeds in a queue to log and display
 			//to sd card
 			
 				#ifdef DEBUG

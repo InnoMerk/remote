@@ -34,7 +34,6 @@ void vControlTask (void *pvParameters)
 	uint8_t rxMode=0; 
 	uint8_t rxCPU=0;
 	uint8_t rxLimit=0;
-	uint8_t rxHit=0;
 	
 	for(;;)
 	{
@@ -65,7 +64,7 @@ void vControlTask (void *pvParameters)
 			case STATIC_MODE:
 			/*body*/
 			{
-				if( xQueueReceive( xHitQueueCTRL, &rxHit, ( TickType_t ) 0 ) ) continue;
+				
 				
 				static uint8_t static_state =MOVING_UP_STATE;
 				switch(static_state)
@@ -86,7 +85,7 @@ void vControlTask (void *pvParameters)
 					}	
 					case UP_WAIT_STATE:
 					{
-						if(SHOT==rxHit)
+						if(SHOT==rxLimit)
 						{
 							CloseAllTransistors();
 							openReversePair();
@@ -122,7 +121,6 @@ void vControlTask (void *pvParameters)
 				static uint16_t UpTimeOut=0;
 				static uint16_t DownTimeOut=0;
 				
-				if( xQueueReceive( xHitQueueCTRL, &rxHit, ( TickType_t ) 0 ) ) continue;
 				
 				switch(random_state)
 				{
@@ -147,7 +145,7 @@ void vControlTask (void *pvParameters)
 					case UP_WAIT_STATE:
 					{
 						UpTimeOut+=100;
-						if(SHOT==rxHit)
+						if(SHOT==rxLimit)
 						{
 							CloseAllTransistors();
 							openReversePair();

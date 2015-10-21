@@ -15,9 +15,9 @@
 	
 	#include "modeTask.h"
 
-	extern QueueHandle_t xHitQueueCTRL;
-	extern QueueHandle_t xHitQueueLCD;
-	
-	void vHitTask (void *pvParameters);
+//	extern QueueHandle_t xHitQueueCTRL;
+//	extern QueueHandle_t xHitQueueLCD;
+//	
+//	void vHitTask (void *pvParameters);
 #endif
 
