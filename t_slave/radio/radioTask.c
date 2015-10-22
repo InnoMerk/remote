@@ -29,20 +29,26 @@ SemaphoreHandle_t xSPI_Mutex;
 
 QueueHandle_t xSPI_RX_Queue;
 QueueHandle_t xSPI_TX_Queue;
+
+QueueHandle_t xSlaveModeChangeQueue;
 	
 static uint8_t tmp_mode_tx=0;
 static uint8_t tmp_limit_tx=0; 
 void tx_message_assembly(uint8_t mode);
 void rx_message_parse(uint8_t* package);
 
+
+
 void vTranceiveTask (void *pvParameters)
 {
   radiomodule_hardware_init();
 	
-	xNRF_IRQ_Semaphore = xSemaphoreCreateBinary();
-	xSPI_Mutex         = xSemaphoreCreateMutex();
-	xSPI_RX_Queue      = xQueueCreate(64, sizeof(char));
-	xSPI_TX_Queue      = xQueueCreate(64, sizeof(char));
+	xNRF_IRQ_Semaphore  =   xSemaphoreCreateBinary();
+	xSPI_Mutex          =   xSemaphoreCreateMutex();
+	xSPI_RX_Queue       =   xQueueCreate(64, sizeof(char));
+	xSPI_TX_Queue       =   xQueueCreate(64, sizeof(char));
+	
+	xSlaveModeChangeQueue = xQueueCreate(4,sizeof(uint8_t));
 	
 	initr_NRF24L01();
 	
@@ -65,6 +71,7 @@ void vTranceiveTask (void *pvParameters)
 			
 			if(rx_command==COMMAND_SETMODE)
 			{
+				xQueueSend(xSlaveModeChangeQueue,(dataIn+5),NULL);
 				//take  sum of remote clicks = N,from dataIn[5]
 				//and get them to the modeTask 
 			}

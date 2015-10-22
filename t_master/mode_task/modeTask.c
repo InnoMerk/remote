@@ -1,5 +1,8 @@
 #include "modeTask.h"
 
+#define STEP              10
+#define MAX_MASTER_MODE   30
+#define MAX_SLAVE_MODE    40
 void initHardware(void);
 void initSlaveModeButton(void);
 
@@ -29,10 +32,10 @@ void vModeTask( void *pvParameters )
 					continue;
 				}
 				
-				mode+=10;
-				if (mode>30) 
+				mode+=STEP;
+				if (mode>MAX_MASTER_MODE) 
 				{
-					mode=10;
+					mode=STEP;
 				}
 				
 				xQueueSend( xModeQueueCTRL,  &mode, ( TickType_t ) 0 );
@@ -59,7 +62,7 @@ void init_button()
 void vSlaveModeTask( void* pvParameters)
 {
 	initSlaveModeButton();
-	static uint8_t  mode = 10;
+	static uint8_t  mode = STEP;
 
 	xSlaveModeQueue = xQueueCreate( 4, sizeof( uint8_t ) );
 	
@@ -76,14 +79,8 @@ void vSlaveModeTask( void* pvParameters)
 					continue;
 				}
 				
-				mode+=10;
-				if (mode>50) 
-				{
-					mode=10;
-				}
-				
-				
-				xQueueSend( xSlaveModeQueue,  &mode, ( TickType_t ) 0 );
+				mode=STEP;
+				xQueueSend( xSlaveModeQueue, &mode, ( TickType_t ) 0 );
 			}
 		}	
 		vTaskDelay(100/ portTICK_PERIOD_MS);

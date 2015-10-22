@@ -10,7 +10,7 @@
 #define COMMAND_SETMODE  0x33 
 
 void transmit_package(uint8_t* data);
-void tx_message_assembly(uint8_t* package,uint8_t masterMode,uint8_t slaveMode);
+void tx_message_assembly(uint8_t* package,uint8_t masterMode);
 void rx_message_parse(uint8_t* package,uint16_t* report);
 	
 uint32_t systime;
@@ -22,7 +22,7 @@ char* SPI_RX_bufptr;
 char SPI_TX_buf[64];
 char SPI_RX_buf[64];
 
-char SPI_NULL_buf[64] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+char SPI_NULL_buf[64] = {0};
 
 uint8_t SPI_buf_idx;
 
@@ -42,33 +42,35 @@ void vTransmitTask (void *pvParameters)
 	
 	
 	
-	vTaskDelay(1000/portTICK_PERIOD_MS);
 	xNRF_IRQ_Semaphore = xSemaphoreCreateBinary();
 	xSPI_Mutex = xSemaphoreCreateMutex();
+	
 	xSPI_RX_Queue = xQueueCreate(64, sizeof(char));
 	xSPI_TX_Queue = xQueueCreate(64, sizeof(char));
-  SystemInit();
-  radiomodule_hardware_init();
 	
-	static uint8_t dataOut[32], i;
-	uint32_t tr_count;
-
-
+	xQueueRemoteLCD = xQueueCreate(4,sizeof(uint16_t));
+	
+	radiomodule_hardware_init();
 	init_NRF24L01();
-
+	uint8_t static master_mode=0;
 	
-
+	xTaskCreate(vReceiveTask,
+		                    (const char*)"receive",
+							configMINIMAL_STACK_SIZE,
+							NULL,
+							tskIDLE_PRIORITY + 1,
+							NULL);	
+ 
   for(;;)
   {
-		uint8_t static masterMode=0;
-		uint8_t static slaveMode=0;
-		 xQueueReceive( xModeQueueCTRL, &masterMode, ( TickType_t ) NULL) ;
-		 xQueueReceive( xSlaveModeQueue, &slaveMode, ( TickType_t ) NULL) ;
 		
-		tx_message_assembly(dataOut,masterMode,slaveMode);
-		transmit_package(dataOut);
+		uint8_t  data_out[32]={0};
+		
+		xQueueReceive( xModeQueueCTRL, &master_mode, ( TickType_t ) NULL) ;
+		
+		tx_message_assembly(data_out,master_mode);
+		transmit_package(data_out);
 			
-		
 		vTaskDelay(500/portTICK_PERIOD_MS);
 		
   }
@@ -79,22 +81,22 @@ void vTransmitTask (void *pvParameters)
 
 void vReceiveTask (void *pvParameters)
 {
-	xQueueRemoteLCD = xQueueCreate(2,sizeof(uint16_t));
-	uint8_t dataIn[32];
-	uint32_t rx_count = 0;
-	vTaskDelay(5000/portTICK_PERIOD_MS);
-	
+
 	for(;;)
 	{
 		uint16_t tmp=0;
+		uint8_t dataIn[32]={0};
+		
 		if(xSemaphoreTake(xNRF_IRQ_Semaphore, 100)==pdTRUE)
 		{	
+			GPIO_ResetBits(GPIOC,GREEN);
+			
 			NRF24L01_GetData(dataIn);
 			
 			rx_message_parse(dataIn,&tmp);
-			xQueueSend(xQueueRemoteLCD,&tmp,NULL);
 			
-			GPIO_ResetBits(GPIOC,GREEN);
+			xQueueSend(xQueueRemoteLCD,&tmp,NULL);
+		
 			vTaskDelay(50/portTICK_PERIOD_MS);
 		}	
 		else
@@ -138,8 +140,8 @@ switch (package[4])
 			//---------------------
 			case COMMAND_SETMODE:
 			{
-				*report = (uint16_t)(package[5]<<8);
-				*report|=  package[7];
+				*report = (uint16_t)(package[5]<<8)+10;
+				*report|=  package[6];
 				break;	
 			}
 			//---------------------
@@ -149,43 +151,27 @@ switch (package[4])
 			}	
 		}	
 }
-void tx_message_assembly(uint8_t *package,uint8_t masterMode,uint8_t slaveMode)
+void tx_message_assembly(uint8_t *package,uint8_t masterMode)
 {
-	__NOP();
 	package[0]=ADR_0;
 	package[1]=ADR_1;
 	package[2]=ADR_2;
 	package[3]=ADR_3;
-	switch (masterMode)
-		{
-			//--------------------
-			case MASTER_DEFAULT_MODE:
-			{
-				__NOP();
-				package[4]=0x00;
-				break;
-			}
-			//---------------------
-			case MASTER_TEST_MODE:
-			{
-				package[4]=COMMAND_GETSTATE; 
-				break;
-			}
-			//---------------------
-			case MASTER_SETSLAVE_MODE:
-			{
-				package[4]=COMMAND_SETMODE;
-				//package[5]=slave_mode_select;
-				package[5]=slaveMode;
-				break;
-			}
-			//--------------------
-			default:
-			{	
-			package[4]=0x00;	
-			}	
-		}
+	
+	package[4] = 0x00;
+	
+	if(MASTER_GETSTATE_MODE ==  masterMode)
+	{
+		package[4] = COMMAND_GETSTATE;
+	}
+	if(MASTER_SETSTATE_MODE ==  masterMode)
+	{
+		package[4] = COMMAND_SETMODE;
+		xQueueReceive(xSlaveModeQueue,(package+5),100);
+	}	
 }
+
+
 
 void transmit_package(uint8_t *data)
 {

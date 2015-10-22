@@ -1,5 +1,8 @@
 #include "modeTask.h"
 
+#define STEP 10
+#define MAX_MODE 40
+
 QueueHandle_t xModeQueueCTRL;
 QueueHandle_t xModeQueueLCD;
 QueueHandle_t xModeQueueRadioTx;
@@ -9,7 +12,7 @@ void init_button();
 void vModeTask( void *pvParameters )
 {
 	init_button();
-	static uint8_t  mode = 10;
+	static uint8_t  mode = STEP;
 	xModeQueueCTRL=xQueueCreate( 4, sizeof( uint8_t ) );	
 	xModeQueueLCD=xQueueCreate( 4, sizeof( uint8_t ) );
 	xModeQueueRadioTx=xQueueCreate( 4, sizeof( uint8_t ) );
@@ -27,10 +30,10 @@ void vModeTask( void *pvParameters )
 					continue;
 				}
 				
-				mode+=10;
-				if (mode>40) 
+				mode+=STEP;
+				if (mode>MAX_MODE) 
 				{
-					mode=10;
+					mode=STEP;
 				}
 				
 				xQueueSend( xModeQueueCTRL,  &mode, ( TickType_t ) 0 );
@@ -38,6 +41,17 @@ void vModeTask( void *pvParameters )
 				xQueueSend( xModeQueueRadioTx,  &mode, ( TickType_t ) 0 );
 			}
 		}	
+		uint8_t tmp=0;
+		
+		if(xQueueReceive(xSlaveModeChangeQueue, &tmp, NULL)==pdTRUE)
+		{
+			mode += tmp;
+			if(mode > MAX_MODE) {mode %= MAX_MODE;}
+				
+			xQueueSend( xModeQueueCTRL,  &mode, ( TickType_t ) 0 );
+			xQueueSend( xModeQueueLCD,  &mode, ( TickType_t ) 0 );
+			xQueueSend( xModeQueueRadioTx,  &mode, ( TickType_t ) 0 );
+		}
 		
 		vTaskDelay(100/ portTICK_PERIOD_MS);
 	}

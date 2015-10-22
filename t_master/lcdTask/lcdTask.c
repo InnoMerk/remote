@@ -47,7 +47,7 @@ void vLcdTask (void *pvParameters)
 
 void print_slave_state( uint16_t tmp)
 {
-	if(masterMode==MASTER_TEST_MODE||masterMode==MASTER_SETSLAVE_MODE)
+	if(masterMode==MASTER_GETSTATE_MODE||masterMode==MASTER_SETSTATE_MODE)
 	{
 		uint8_t tmp_limit = (uint8_t) tmp;
 		uint8_t tmp_mode=(uint8_t)(tmp>>8);	
@@ -79,14 +79,9 @@ void print_slave_state( uint16_t tmp)
 				lcd_puts("RCTL");
 				break;
 			}	
-			case TEST_SLAVE_MODE:
-			{
-				lcd_puts("TEST");
-				break;
-			}
 			default:
 			{	
-				lcd_puts("ERRr");
+				lcd_puts("Err ");
 			}	
 	
 		}//case
@@ -115,7 +110,7 @@ void print_master_mode(uint8_t* tmp)
 				break;
 			}
 			//---------------------
-			case MASTER_TEST_MODE:
+			case MASTER_GETSTATE_MODE:
 			{
 				lcd_goto(1,7);
 				lcd_putc('G');
@@ -123,7 +118,7 @@ void print_master_mode(uint8_t* tmp)
 				break;
 			}
 			//---------------------
-			case MASTER_SETSLAVE_MODE:
+			case MASTER_SETSTATE_MODE:
 			{
 				lcd_goto(1,7);
 				lcd_putc('S');

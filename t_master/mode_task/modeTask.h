@@ -2,8 +2,8 @@
 #define MODETASK_H
 
 #define MASTER_DEFAULT_MODE               10
-#define MASTER_TEST_MODE                  20
-#define MASTER_SETSLAVE_MODE              30
+#define MASTER_GETSTATE_MODE              20
+#define MASTER_SETSTATE_MODE              30
 
 #define WAITING_SLAVE_MODE       10
 #define STATIC_SLAVE_MODE        20

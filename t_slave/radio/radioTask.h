@@ -57,6 +57,9 @@ extern QueueHandle_t xSPI_RX_Queue;
 extern QueueHandle_t xSPI_TX_Queue;
 
 extern SemaphoreHandle_t xModeSemaphore;
+
+extern QueueHandle_t xSlaveModeChangeQueue;
+
 void vTranceiveTask (void *pvParameters);
 
 
