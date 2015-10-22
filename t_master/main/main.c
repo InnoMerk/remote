@@ -52,7 +52,15 @@ int main()
 								 NULL,
 								 tskIDLE_PRIORITY + 1,
 								 NULL
-							 );												
+							 );	
+		xTaskCreate( vSlaveModeTask,
+								 (const char*)"slaveModeTask",
+								 configMINIMAL_STACK_SIZE,
+								 NULL,
+								 tskIDLE_PRIORITY + 1,
+								 NULL
+							 );							 
+							
 		
 		vTaskStartScheduler();  //l88
 		

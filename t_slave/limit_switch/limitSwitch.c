@@ -1,9 +1,10 @@
 #include "limitSwitch.h"
 
 void initHardware(void);
-void initHit(void);
+
 QueueHandle_t xLimiterQueueCTRL;
 QueueHandle_t xLimiterQueueLCD;
+QueueHandle_t xLimitQueueRadioTx;
 
 uint8_t static txPosition=0;
 
@@ -13,6 +14,7 @@ void vLimitSwitchTask( void* pvParameters)
 	initHardware();
 	xLimiterQueueCTRL = xQueueCreate( 4, sizeof( uint8_t ) );
 	xLimiterQueueLCD  = xQueueCreate( 4, sizeof( uint8_t ) );
+	xLimitQueueRadioTx  = xQueueCreate( 4, sizeof( uint8_t ) );
 	
 	xTaskCreate(vHitTask,
 							 (const char*)"HitTask",
@@ -27,10 +29,6 @@ void vLimitSwitchTask( void* pvParameters)
 	{
 		uint8_t rxMode=0;
 		
-		if( xQueueReceive( xModeQueueLimit, &rxMode, ( TickType_t ) 10 ) )
-    {
-      continue; 
-    }	
 		
 		if(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_6))
 		{
@@ -44,7 +42,7 @@ void vLimitSwitchTask( void* pvParameters)
 					
 					xQueueSend( xLimiterQueueLCD,  &txPosition, ( TickType_t ) 0 );
 					xQueueSend( xLimiterQueueCTRL,  &txPosition, ( TickType_t ) 0 );
-					
+					xQueueSend( xLimitQueueRadioTx,  &txPosition, ( TickType_t ) 0 );
 					
 					while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_6))
 					{
@@ -55,7 +53,7 @@ void vLimitSwitchTask( void* pvParameters)
 					
 					xQueueSend( xLimiterQueueCTRL,  &txPosition, ( TickType_t ) 0 );
 					xQueueSend( xLimiterQueueLCD,  &txPosition, ( TickType_t ) 0 );
-					
+					xQueueSend( xLimitQueueRadioTx,  &txPosition, ( TickType_t ) 0 );
 					
 				}
 			}	
@@ -71,7 +69,7 @@ void vLimitSwitchTask( void* pvParameters)
 					
 					xQueueSend( xLimiterQueueCTRL,  &txPosition, ( TickType_t ) 0 );
 					xQueueSend( xLimiterQueueLCD,  &txPosition, ( TickType_t ) 0 );
-					
+					xQueueSend( xLimitQueueRadioTx,  &txPosition, ( TickType_t ) 0 );
 					
 					while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_7))
 					{
@@ -82,7 +80,7 @@ void vLimitSwitchTask( void* pvParameters)
 					
 					xQueueSend( xLimiterQueueCTRL,  &txPosition, ( TickType_t ) 0 );
 					xQueueSend( xLimiterQueueLCD,  &txPosition, ( TickType_t ) 0 );
-					
+					xQueueSend( xLimitQueueRadioTx,  &txPosition, ( TickType_t ) 0 );
 				}
 			}
 			
@@ -100,7 +98,7 @@ void vHitTask( void* pvParameters)
 	
 	for(;;)
 	{
-//		if(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_5))
+		if(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_5))
 		{
 				uint8_t txHit=EMPTY;
 		
@@ -113,6 +111,7 @@ void vHitTask( void* pvParameters)
 					txHit= SHOT;
 					xQueueSend( xLimiterQueueLCD,  &txHit, ( TickType_t ) 0 );
 					xQueueSend( xLimiterQueueCTRL,  &txHit, ( TickType_t ) 0 );
+					xQueueSend( xLimitQueueRadioTx,  &txHit, ( TickType_t ) 0 );
 					
 					while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_5))
 					{
@@ -120,7 +119,7 @@ void vHitTask( void* pvParameters)
 					}
 					xQueueSend( xLimiterQueueLCD,  &txPosition, ( TickType_t ) 0 );
 					xQueueSend( xLimiterQueueCTRL,  &txPosition, ( TickType_t ) 0 );
-					
+					xQueueSend( xLimitQueueRadioTx,  &txPosition, ( TickType_t ) 0 );
 				}
 		}			
 			vTaskDelay(100/ portTICK_PERIOD_MS);

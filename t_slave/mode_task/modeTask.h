@@ -5,7 +5,6 @@
 #define STATIC_MODE        20
 #define RANDOM_MODE				 30
 #define RADIOCONTROL_MODE  40
-#define TEST_MODE          50
 
 #define UP                 10
 #define DOWN               20 
@@ -33,10 +32,11 @@
 	#include "queue.h"
 	
 
+#include "radioTask.h"
 
 	extern QueueHandle_t xModeQueueCTRL;
-	extern QueueHandle_t xModeQueueLimit;
 	extern QueueHandle_t xModeQueueLCD;
+	extern QueueHandle_t xModeQueueRadioTx;
 	
 	void vModeTask (void *pvParameters); 
 

@@ -5,7 +5,7 @@ void gpio_init(void);
 int main()
 	{
 		//-------------------------------------------------start initialisation---------------------------------------
-		
+		SystemInit();
 		//PrintfConfig();
 		gpio_init(); 
 		
@@ -26,13 +26,19 @@ int main()
 								 NULL
 							  );
 								 
-		xTaskCreate(  vGetLoadCPU,
-								 (const char*)"getLoadCPU",
-									configMINIMAL_STACK_SIZE,
- 								  NULL,
- 								  tskIDLE_PRIORITY + 1,
- 								  NULL
-							 );
+//		xTaskCreate(  vGetLoadCPU,
+//								 (const char*)"getLoadCPU",
+//									configMINIMAL_STACK_SIZE,
+// 								  NULL,
+// 								  tskIDLE_PRIORITY + 1,
+// 								  NULL
+//							 );
+		xTaskCreate( vTranceiveTask,
+							  "Retranslator",
+								configMINIMAL_STACK_SIZE,
+								NULL,
+								tskIDLE_PRIORITY + 1,
+								NULL);										 
 		
 		xTaskCreate( vModeTask,
 								 (const char*)"modeTask",
@@ -72,12 +78,7 @@ int main()
 //							  tskIDLE_PRIORITY + 1,
 //							  NULL
 //							 );
-		xTaskCreate( vTranceiveTask,
-							  "Retranslator",
-								configMINIMAL_STACK_SIZE,
-								NULL,
-								tskIDLE_PRIORITY + 1,
-								NULL);						
+				
 		
 		vTaskStartScheduler();  //
 		

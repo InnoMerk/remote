@@ -4,7 +4,7 @@
 //             useful RTOS project functions
 /*******************************************************************/
 volatile u32 idle_counter=0;
-volatile static uint8_t CPU_IDLE = 0;
+static uint8_t CPU_IDLE = 0;
 
 //---------------------------------
 uint8_t  GetCPU_IDLE(void) {

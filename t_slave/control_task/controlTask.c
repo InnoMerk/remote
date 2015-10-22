@@ -197,21 +197,6 @@ void vControlTask (void *pvParameters)
 			
 				break;
 			}	
-			case TEST_MODE:
-			{
-				vTaskDelay(3000/ portTICK_PERIOD_MS);	
-				openForwardPair();
-				vTaskDelay(3000/ portTICK_PERIOD_MS);	
-				
-				CloseAllTransistors();
-				vTaskDelay(500/ portTICK_PERIOD_MS);
-				
-				openReversePair();
-				vTaskDelay(3000/ portTICK_PERIOD_MS);
-				
-				CloseAllTransistors();
-			break;
-			}	
 			//--------------------
 			default:
 			{

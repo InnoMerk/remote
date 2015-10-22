@@ -28,6 +28,8 @@
 #include "queue.h"
 	
 #include "loadCPU.h"
+#include "modeTask.h"
+#include "limitSwitch.h"
 
 #include "hardwareInit.h"
 #include "stm32nrf24l01regs.h"
@@ -54,7 +56,7 @@ extern SemaphoreHandle_t xSPI_Mutex;
 extern QueueHandle_t xSPI_RX_Queue;
 extern QueueHandle_t xSPI_TX_Queue;
 
-
+extern SemaphoreHandle_t xModeSemaphore;
 void vTranceiveTask (void *pvParameters);
 
 

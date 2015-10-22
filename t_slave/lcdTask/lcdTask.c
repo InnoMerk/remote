@@ -6,7 +6,7 @@ void vLcdTask (void *pvParameters)
 	vTaskDelay(2000/ portTICK_PERIOD_MS) ;
 	lcd_init();
 	
-	uint8_t lcdMode=0;
+	uint8_t lcdMode=10;
 	uint8_t lcdCPU=0;
 	uint8_t lcdLimit=0;
 	uint8_t lcdHit=0;
@@ -15,7 +15,7 @@ void vLcdTask (void *pvParameters)
 	{
 		
 		
-		xQueueReceive( xCPUloadLCD, &lcdCPU, ( TickType_t ) NULL );
+		//xQueueReceive( xCPUloadLCD, &lcdCPU, ( TickType_t ) NULL );
     
 		xQueueReceive( xModeQueueLCD, &lcdMode, ( TickType_t ) NULL) ;
    
@@ -61,13 +61,6 @@ void vLcdTask (void *pvParameters)
 				lcd_puts("RADIO");
 				break;
 			}	
-			case TEST_MODE:
-			{
-				lcd_goto(2,0);
-				lcd_puts("TEST");
-			 
-				break;
-			}
 			//--------------------
 			default:
 			{	

@@ -11,6 +11,12 @@
 #define RADIOCONTROL_SLAVE_MODE  40
 #define TEST_SLAVE_MODE          50
 
+#define SLAVE_UP                 10
+#define SLAVE_DOWN               20 
+#define SLAVE_UP_LIMIT           30
+#define SLAVE_DOWN_LIMIT         40 
+#define SLAVE_SHOT               50
+
 
 #include "stm32f10x.h"
 
@@ -28,7 +34,9 @@
 
 	extern QueueHandle_t xModeQueueCTRL;
 	extern QueueHandle_t xModeQueueLCD;
+	extern QueueHandle_t xSlaveModeQueue;
 	
+	void vSlaveModeTask( void* pvParameters);
 	void vModeTask (void *pvParameters); 
 
 #endif

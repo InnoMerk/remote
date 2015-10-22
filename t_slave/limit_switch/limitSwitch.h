@@ -16,7 +16,7 @@
 
 	extern QueueHandle_t xLimiterQueueCTRL;
 	extern QueueHandle_t xLimiterQueueLCD;
-	extern QueueHandle_t xLimiterQueueMOVE;
+	extern QueueHandle_t xLimitQueueRadioTx;
 	
 	void vLimitSwitchTask (void *pvParameters); 
 	void vHitTask( void* pvParameters);
