@@ -71,7 +71,7 @@ void vTransmitTask (void *pvParameters)
 		tx_message_assembly(data_out,master_mode);
 		transmit_package(data_out);
 			
-		vTaskDelay(500/portTICK_PERIOD_MS);
+		vTaskDelay(200/portTICK_PERIOD_MS);
 		
   }
 	vTaskDelete(NULL);
@@ -89,7 +89,7 @@ void vReceiveTask (void *pvParameters)
 		
 		if(xSemaphoreTake(xNRF_IRQ_Semaphore, 100)==pdTRUE)
 		{	
-			GPIO_ResetBits(GPIOC,GREEN);
+			GPIO_ResetBits(GPIOC,BLUE);
 			
 			NRF24L01_GetData(dataIn);
 			
@@ -181,7 +181,7 @@ void transmit_package(uint8_t *data)
 		
 		NRF24L01_Transmit(data);
 	
-    GPIO_SetBits(GPIOC,GREEN);
+    GPIO_SetBits(GPIOC,BLUE);
     
 		do 
 		{

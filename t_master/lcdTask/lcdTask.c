@@ -16,7 +16,7 @@ void vLcdTask (void *pvParameters)
 	
 	for(;;)
 	{
-		lcd_clrscr();
+		lcd_clrscr();//
 		
 	
 		xQueueReceive( xCPUloadLCD, &lcdCPU, ( TickType_t ) 10 ) ;		
@@ -76,7 +76,7 @@ void print_slave_state( uint16_t tmp)
 				//--------------------
 			case RADIOCONTROL_SLAVE_MODE:
 			{
-				lcd_puts("RCTL");
+				lcd_puts("DIST");
 				break;
 			}	
 			default:
@@ -86,11 +86,14 @@ void print_slave_state( uint16_t tmp)
 	
 		}//case
 		lcd_goto(2,7);
-		if(tmp_limit==SLAVE_SHOT)      {lcd_putc('*');}
-		if(tmp_limit==SLAVE_UP)        {lcd_putc('i');}
-		if(tmp_limit==SLAVE_UP_LIMIT)  {lcd_putc('+');}
-		if(tmp_limit==SLAVE_DOWN_LIMIT){lcd_putc('-');}
-	  if(tmp_limit==SLAVE_DOWN)      {lcd_putc('!');}
+		if(masterMode==MASTER_GETSTATE_MODE)
+		{	
+			if(tmp_limit==SLAVE_SHOT)           {lcd_putc('*');vTaskDelay(200/portTICK_PERIOD_MS);}
+			else if(tmp_limit==SLAVE_UP)        {lcd_putc('i');}
+			else if(tmp_limit==SLAVE_UP_LIMIT)  {lcd_putc('+');}
+			else if(tmp_limit==SLAVE_DOWN_LIMIT){lcd_putc('-');}
+			else if(tmp_limit==SLAVE_DOWN)      {lcd_putc('!');}
+		}//if
 	}	//if
 	else
 		lcd_puts("unLink");

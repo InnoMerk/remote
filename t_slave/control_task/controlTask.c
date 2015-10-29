@@ -31,7 +31,7 @@ void vControlTask (void *pvParameters)
 	outputsInit();
 	
 	/*xDirectionQueue = xQueueCreate( 8, sizeof( uint8_t ) );*/
-	uint8_t rxMode=0; 
+	uint8_t rxMode=10; 
 	uint8_t rxCPU=0;
 	uint8_t rxLimit=0;
 	

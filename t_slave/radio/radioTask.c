@@ -88,10 +88,12 @@ void vTranceiveTask (void *pvParameters)
 			
 			NRF24L01_PowerUpRx();
 			GPIO_ResetBits(GPIOC,BLUE);
+			
+			vTaskDelay(50/portTICK_PERIOD_MS);
 		}
 		else
 		{		
-				vTaskDelay(50/portTICK_PERIOD_MS);
+				vTaskDelay(100/portTICK_PERIOD_MS);
 		}	
 	}	
 	vTaskDelete(NULL);

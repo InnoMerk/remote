@@ -25,7 +25,7 @@ xCPUloadLCD=xQueueCreate( 4, sizeof( uint8_t ) );
 //				lcd_putc('%');
 //				lcd_goto(2,0);
 //				lcd_puts(":)");
-				vTaskDelay(100/ portTICK_PERIOD_MS);	
+				vTaskDelay(200/ portTICK_PERIOD_MS);	
 			}
 }
  
